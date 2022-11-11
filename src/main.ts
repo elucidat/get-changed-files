@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {context, GitHub} from '@actions/github'
+import {context, getOctokit} from '@actions/github'
 import minimatch from 'minimatch'
 
 type Format = 'space-delimited' | 'csv' | 'json'
@@ -8,7 +8,7 @@ type FileStatus = 'added' | 'modified' | 'removed' | 'renamed'
 async function run(): Promise<void> {
   try {
     // Create GitHub client with the API token.
-    const client = new GitHub(core.getInput('token', {required: true}))
+    const client = getOctokit(core.getInput('token', {required: true}))
     const format = core.getInput('format', {required: true}) as Format
     const filter = core.getMultilineInput('filter', {required: true}) || '*'
 
@@ -62,7 +62,7 @@ async function run(): Promise<void> {
 
     // Use GitHub's compare two commits API.
     // https://developer.github.com/v3/repos/commits/#compare-two-commits
-    const response = await client.repos.compareCommits({
+    const response = await client.rest.repos.compareCommits({
       base,
       head,
       owner: context.repo.owner,
@@ -77,6 +77,7 @@ async function run(): Promise<void> {
       )
     }
 
+    // @ts-ignore
     const files = response.data.files.filter(file => {
       let match = false
       for (const item of filter) {
@@ -93,12 +94,12 @@ async function run(): Promise<void> {
       return match
     })
 
-    const all = [] as string[],
-      added = [] as string[],
-      modified = [] as string[],
-      removed = [] as string[],
-      renamed = [] as string[],
-      addedModified = [] as string[]
+    const all = [] as string[]
+    const added = [] as string[]
+    const modified = [] as string[]
+    const removed = [] as string[]
+    const renamed = [] as string[]
+    const addedModified = [] as string[]
     for (const file of files) {
       const filename = file.filename
       // If we're using the 'space-delimited' format and any of the filenames have a space in them,
@@ -138,12 +139,12 @@ async function run(): Promise<void> {
     }
 
     // Format the arrays of changed files.
-    let allFormatted: string,
-      addedFormatted: string,
-      modifiedFormatted: string,
-      removedFormatted: string,
-      renamedFormatted: string,
-      addedModifiedFormatted: string
+    let allFormatted: string
+    let addedFormatted: string
+    let modifiedFormatted: string
+    let removedFormatted: string
+    let renamedFormatted: string
+    let addedModifiedFormatted: string
     switch (format) {
       case 'space-delimited':
         // If any of the filenames have a space in them, then fail the step.
@@ -197,6 +198,7 @@ async function run(): Promise<void> {
     // For backwards-compatibility
     core.setOutput('deleted', removedFormatted)
   } catch (error) {
+    // @ts-ignore
     core.setFailed(error.message)
   }
 }

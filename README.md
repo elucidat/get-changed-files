@@ -1,7 +1,7 @@
 # get-changed-files
 
-[![CI status](https://github.com/Ana06/get-changed-files/workflows/Test/badge.svg)](https://github.com/Ana06/get-changed-files/actions?query=event%3Apush+branch%3Amain)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.txt)
+[![CI status](https://github.com/elucidat/get-changed-files/workflows/Test/badge.svg)](https://github.com/elucidat/get-changed-files/actions?query=event%3Apush+branch%3Amain)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 Get all changed/modified files in a pull request (`pull_request` or `pull_request_target`) or push's commits.
 You can choose to get all changed files, only added files, only modified files, only removed files, only renamed files, or all added and modified files.
@@ -9,7 +9,7 @@ These outputs are available via the `steps` output context.
 The `steps` output context exposes the output names `all`, `added`, `modified`, `removed`, `renamed`, and `added_modified`.
 Renamed files that are also modified are included in `renamed`, `modified` and `added_modified`.
 
-This project is a fork of <https://github.com/jitterbit/get-changed-files>, which supports `pull_request_target`, allow to filter files using regular expressions, removes the ahead check and considers renamed modified files as modified.
+This project is a fork of <https://github.com/Ana06/get-changed-files> (which in turn forks <https://github.com/jitterbit/get-changed-files>), which uses the latest core and a.
 
 - [Usage](#usage)
   - [Filtering](#filtering)
@@ -27,7 +27,7 @@ This project is a fork of <https://github.com/jitterbit/get-changed-files>, whic
 See [action.yml](action.yml)
 
 ```yaml
-- uses: Ana06/get-changed-files@v2.1.0
+- uses: elucidat/get-changed-files@v1.0.0
   with:
     # Format of the steps output context.
     # Can be 'space-delimited', 'csv', or 'json'.
@@ -53,7 +53,7 @@ Consider using one of the other formats if that's the case.
 
 ```yaml
 - id: files
-  uses: Ana06/get-changed-files@v2.1.0
+  uses: elucidat/get-changed-files@v1.0.0
 - run: |
     for changed_file in ${{ steps.files.outputs.all }}; do
       echo "Do something with this ${changed_file}."
@@ -67,7 +67,7 @@ Consider using one of the other formats if that's the case.
 
 ```yaml
 - id: files
-  uses: Ana06/get-changed-files@v2.1.0
+  uses: elucidat/get-changed-files@v1.0.0
   with:
     filter: '*.php'
 - run: |
@@ -83,7 +83,7 @@ Therefore, including all YML files first and excluding the YML files of your `.g
 If those two globs were inverted, you **would** include all the YML files, with the ones in your `.github/*/` directories.
 
 ```yaml
-- uses: Ana06/get-changed-files@v2.1.0
+- uses: elucidat/get-changed-files@v1.0.0
   with:
     filter: |
       *.yml
@@ -94,7 +94,7 @@ If those two globs were inverted, you **would** include all the YML files, with 
 
 ```yaml
 - id: files
-  uses: Ana06/get-changed-files@v2.1.0
+  uses: elucidat/get-changed-files@v1.0.0
   with:
     format: 'csv'
     filter: '*'
@@ -109,7 +109,7 @@ If those two globs were inverted, you **would** include all the YML files, with 
 
 ```yaml
 - id: files
-  uses: Ana06/get-changed-files@v2.1.0
+  uses: elucidat/get-changed-files@v1.0.0
   with:
     format: 'json'
     filter: '*'
