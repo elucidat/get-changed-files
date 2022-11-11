@@ -9,7 +9,7 @@ These outputs are available via the `steps` output context.
 The `steps` output context exposes the output names `all`, `added`, `modified`, `removed`, `renamed`, and `added_modified`.
 Renamed files that are also modified are included in `renamed`, `modified` and `added_modified`.
 
-This project is a fork of <https://github.com/Ana06/get-changed-files> (which in turn forks <https://github.com/jitterbit/get-changed-files>), which uses the latest core and a.
+This project is a fork of <https://github.com/Ana06/get-changed-files> (that in turn forks <https://github.com/jitterbit/get-changed-files>), which uses the latest core and github actions, sets the Node version to 16, and updates all the devDependencies.
 
 - [Usage](#usage)
   - [Filtering](#filtering)
